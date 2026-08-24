@@ -55,5 +55,16 @@ export function useRunDetail(runId: string | undefined): UseRunDetailReturn {
     }
   }, [events]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Fallback polling while a run is active (WebSocket events can be missed)
+  useEffect(() => {
+    if (!run || run.status === "completed" || run.status === "failed") return;
+
+    const interval = setInterval(() => {
+      fetchRun();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [run?.status, runId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return { run, events, isConnected, isLoading, error, refetch: fetchRun };
 }
