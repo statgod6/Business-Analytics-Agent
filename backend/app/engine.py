@@ -197,7 +197,7 @@ class RunEngine:
                 "question": question,
             })
 
-            await self._update_run(db=None, run_id=run_id, current_stage=stage)
+            await self._update_run(db, run_id=run_id, current_stage=stage)
 
             # Wait for human decision
             await ctx.decision_event.wait()
