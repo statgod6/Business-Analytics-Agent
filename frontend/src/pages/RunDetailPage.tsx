@@ -1,18 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { useRunDetail } from "../hooks/useRuns";
-import { useWebSocket } from "../hooks/useWebSocket";
 import { useCallback, useMemo } from "react";
 import type { WSGateOpen } from "../types";
 import StageTimeline from "../components/StageTimeline";
-import StageCard from "../components/StageCard";
 import GateReviewPanel from "../components/GateReviewPanel";
+import FileDrop from "../components/FileDrop";
 import { ArrowLeft, Wifi, WifiOff, Loader } from "lucide-react";
 
 export default function RunDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { run, events, isConnected, isLoading, error, refetch } = useRunDetail(id);
-  const { clearEvents } = useWebSocket(id);
-
   // Derive signed stages and current gate from WebSocket events
   const signedStages = useMemo(() => {
     const stages = new Set<number>();
@@ -118,6 +115,16 @@ export default function RunDetailPage() {
         currentStage={run.current_stage}
         signedStages={signedStages}
       />
+
+      {/* File Upload (Stage 2 — Data Collection) */}
+      {run.current_stage === 2 && (
+        <div className="mb-6">
+          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-slate-500">
+            Upload Data Files
+          </h2>
+          <FileDrop runId={id!} />
+        </div>
+      )}
 
       {/* Active Gate Review */}
       {openGate && (

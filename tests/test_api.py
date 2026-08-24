@@ -19,8 +19,14 @@ BASE = "http://test"
 
 @pytest.fixture(autouse=True)
 async def _db_tx():
-    """Create tables, wrap each test in a rollback-able transaction."""
+    """Drop and recreate tables, wrap each test in a rollback-able transaction.
+
+    Using drop_all + create_all ensures schema changes (e.g. new columns)
+    are picked up even when the persistent Docker PostgreSQL already has
+    tables from a previous run.
+    """
     async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
     conn = await engine.connect()

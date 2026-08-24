@@ -20,7 +20,7 @@ from langgraph.types import Command
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.app.agents.runner import StubRunner
+from backend.app.agents.runner import DeepAgentRunner, StubRunner
 from backend.app.agents.stub_fixtures import USER_REQUEST
 from backend.app.config import Settings
 from backend.app.database import Run
@@ -73,12 +73,11 @@ class RunEngine:
         run_id: str,
         user_request: str,
         settings: Settings,
-        stub: bool = False,
     ) -> None:
         """Begin a graph run in the background."""
         ctx = RunContext(run_id=run_id)
         self._runs[run_id] = ctx
-        asyncio.create_task(self._execute(run_id, user_request, settings, stub))
+        asyncio.create_task(self._execute(run_id, user_request, settings))
 
     async def submit_decision(self, run_id: str, payload: dict) -> bool:
         """Feed a gate decision back to a waiting graph."""
@@ -104,7 +103,6 @@ class RunEngine:
         run_id: str,
         user_request: str,
         settings: Settings,
-        stub: bool,
     ) -> None:
         """Background coroutine: build graph, run it, handle interrupts."""
         ctx = self._runs.get(run_id)
@@ -118,7 +116,8 @@ class RunEngine:
             await self._emit(run_id, {"type": "run_started", "run_id": run_id})
 
             try:
-                runner = StubRunner() if stub else StubRunner()
+                has_real_keys = bool(settings.openrouter_api_key)
+                runner = DeepAgentRunner() if has_real_keys else StubRunner()
                 graph = build_graph(runner=runner)
 
                 config = {"configurable": {"thread_id": f"run-{run_id}"}}

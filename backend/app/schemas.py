@@ -43,6 +43,7 @@ class RunOut(BaseModel):
     user_request: str
     result: dict | None
     error: str | None
+    files: list
     created_at: datetime
     updated_at: datetime | None
 

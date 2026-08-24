@@ -103,6 +103,7 @@ class Run(Base, TimestampMixin):
     user_request: Mapped[str] = mapped_column(Text, nullable=False)
     result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    files: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
 
     user: Mapped[User] = relationship("User", back_populates="runs")
 
