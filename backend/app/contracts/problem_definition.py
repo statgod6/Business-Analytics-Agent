@@ -17,6 +17,7 @@ from backend.app.hitl import GateMode
 _HORIZON = re.compile(
     r"\b(daily|weekly|monthly|quarterly|yearly|by\s+\w+|q[1-4]|fy\d{4}|"
     r"(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*"
+    r"(business\s+|calendar\s+)?"
     r"(day|week|month|quarter|year)s?\b)",
     re.IGNORECASE,
 )
