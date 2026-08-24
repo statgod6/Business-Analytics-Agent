@@ -28,6 +28,9 @@ frontend/.vite/
 .DS_Store
 Thumbs.db
 
+# Uploads (test artifacts)
+uploads/
+
 # Docker
 pgdata/
 
