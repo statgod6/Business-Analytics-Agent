@@ -2,7 +2,7 @@
 langgraph>=0.2.60
 langchain>=0.3.0
 langchain-core>=0.3.0
-langchain-deepagents>=0.1.4
+deepagents>=0.7.0  # PyPI package; import is deepagents (create_deep_agent)
 langchain-openai>=0.2.0
 pydantic>=2.8.0
 pydantic-settings>=2.4.0

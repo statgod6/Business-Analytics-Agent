@@ -29,6 +29,7 @@ class BAState(TypedDict, total=False):
     # ── User & loop ─────────────────────────────────────────
     feedback: Annotated[list[dict[str, Any]], operator.add]  # human feedback per gate
     decision_log: Annotated[list[dict[str, Any]], operator.add]  # agent reasoning trail
+    last_gate_decision: dict[str, Any] | None  # set by gate nodes; consumed by routing
 
     # ── Signed artifacts (the contracts) ────────────────────
     problem_definition: ProblemDefinition | None
