@@ -16,19 +16,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  # Added in M3 (FastAPI backend) and M4 (React frontend):
-  # backend:
-  #   build: ./backend
-  #   env_file: .env
-  #   ports: ["8000:8000"]
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  # frontend:
-  #   build: ./frontend
-  #   ports: ["5173:80"]
-  #   depends_on:
-  #     - backend
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: ba-agent-backend
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   pgdata:
