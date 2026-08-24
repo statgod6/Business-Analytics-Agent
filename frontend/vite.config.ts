@@ -7,7 +7,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      "/api": "http://localhost:8000",
+      "/api": {
+        target: "http://localhost:8000",
+        ws: true, // forward WebSocket upgrade for /api/runs/*/ws
+      },
       "/auth": "http://localhost:8000",
     },
   },

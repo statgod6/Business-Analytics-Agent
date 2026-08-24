@@ -70,7 +70,7 @@ async def get_token_from_ws(query_params: str) -> str:
     """Extract a JWT from WebSocket query string ``token=...``."""
     import urllib.parse
 
-    parsed = urllib.parse.parse_qs(query_params)
+    parsed = urllib.parse.parse_qs(str(query_params))
     token = parsed.get("token", [None])[0]
     if not token:
         raise HTTPException(status_code=401, detail="Missing token")
