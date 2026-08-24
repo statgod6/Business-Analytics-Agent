@@ -25,5 +25,5 @@ export async function login(email: string, password: string): Promise<TokenOut> 
 }
 
 export async function getMe(): Promise<User> {
-  return api.get<User>("/api/users/me");
+  return api.get<User>("/auth/me");
 }

@@ -20,7 +20,7 @@ export default function PlotlyChart({ data, layout }: PlotlyChartProps) {
     >
       <div className="w-full">
         <PlotlyComponent
-          data={data}
+          data={data as never}
           layout={
             {
               ...layout,
